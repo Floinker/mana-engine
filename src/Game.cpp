@@ -2,12 +2,17 @@
 #include "Map.h"
 #include "TextureManager.h"
 #include "ECS/Components.h"
+#include "Vector2D.h"
+#include "Collision.h"
 
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
+
+std::vector<ColliderComponent*> Game::colliders;
 
 Map* map;
-
 Manager manager;
+
 auto& playerEntity(manager.addEntity());
 
 Game::Game()
@@ -50,14 +55,17 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 	map = new Map();
-	
+
+	Map::LoadMap("assets/map1.map", 16, 16);
+
 	playerEntity.addComponent<TransformComponent>(100, 500);
 	playerEntity.addComponent<SpriteComponent>("assets/player.png");
+	playerEntity.addComponent<KeyboardController>();
+	playerEntity.addComponent<ColliderComponent>("player");
 }
 
 void Game::handleEvents()
 {
-	SDL_Event event;
 	SDL_PollEvent(&event);
 
 	switch (event.type) {
@@ -70,17 +78,21 @@ void Game::handleEvents()
 	}
 }
 
+int cnt = 0;
 void Game::update()
 {
 	manager.refresh();
 	manager.update();
+
+	for (auto cc : colliders) {
+		Collision::AABB(playerEntity.getComponent<ColliderComponent>(), *cc);
+	}
 }
 
 void Game::render()
 {
 	SDL_RenderClear(renderer);
-	//Add stuff to render
-	map->DrawMap();
+
 	manager.draw();
 
 	SDL_RenderPresent(renderer);
@@ -93,3 +105,7 @@ void Game::clean()
 	SDL_Quit();
 }
 
+void Game::AddTile(int id, int x, int y) {
+	auto& tile(manager.addEntity());
+	tile.addComponent<TileComponent>(x, y, Game::TILE_SIZE, Game::TILE_SIZE, id);
+}

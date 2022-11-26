@@ -2,6 +2,9 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <iostream>
+#include <vector>
+
+class ColliderComponent;
 
 class Game
 {
@@ -10,6 +13,8 @@ public:
 	static const int TILE_SIZE = 16;
 
 	static SDL_Renderer* renderer;
+	static SDL_Event event;
+	static std::vector<ColliderComponent*> colliders;
 
 	Game();
 	~Game();
@@ -20,6 +25,8 @@ public:
 	void update();
 	void render();
 	void clean();
+
+	static void AddTile(int id, int x, int y);
 
 	bool running() { return isRunning;  };
 

@@ -1,2 +1,12 @@
 ﻿  Game.cpp
+D:\Development\SDL2\Projects\Mana\src\ECS\ECS.h(65,33): warning C4244: "Argument": Konvertierung von "_Ty" in "float", möglicher Datenverlust
+          with
+          [
+              _Ty=int
+          ]
+D:\Development\SDL2\Projects\Mana\src\Game.cpp(61,56): message : Siehe Verweis auf die gerade kompilierte Instanziierung "T &Entity::addComponent<TransformComponent,int,int>(int &&,int &&)" der Funktions-Vorlage.
+          with
+          [
+              T=TransformComponent
+          ]
   Mana.vcxproj -> D:\Development\SDL2\Projects\Mana\x64\Debug\Mana.exe
